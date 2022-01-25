@@ -1,0 +1,2 @@
+const MAX_FILE_SIZE_IN_KB = 40;
+const MAX_FILE_COMPLEXITY = 300;

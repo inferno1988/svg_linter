@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:svg_linter/src/constants.dart';
 import 'package:svg_linter/src/file_report.dart';
 import 'package:svg_linter/src/folder_report.dart';
 import 'package:svg_linter/src/graphical_elements.dart';
@@ -55,13 +56,13 @@ class SvgChecker {
           0,
           (previousValue, element) =>
               document.findAllElements(element).length + previousValue);
-      if (iconComplexity > 300) {
+      if (iconComplexity > MAX_FILE_COMPLEXITY) {
         fileResults.add(SvgProblem.toManyElements);
       }
       final stat = await file.stat();
       final fileSizeInKb = (stat.size / 1024).ceil();
 
-      if (fileSizeInKb > 40) {
+      if (fileSizeInKb > MAX_FILE_SIZE_IN_KB) {
         fileResults.add(SvgProblem.toBig);
       }
 
