@@ -1,30 +1,44 @@
-enum SvgProblem {
-  imageTag,
-  styleTag,
-  titleTag,
-  descTag,
-  toManyElements,
-  toBig,
-  wrongDefsOrder,
+sealed class SvgProblem {
+  String description();
 }
 
-String svgProblemAsString(SvgProblem problem) {
-  switch (problem) {
-    case SvgProblem.imageTag:
-      return '<image> tag is not allowed';
-    case SvgProblem.styleTag:
-      return '<style> tag is not allowed';
-    case SvgProblem.titleTag:
-      return '<title> tag is not allowed';
-    case SvgProblem.descTag:
-      return '<desc> tag is not allowed';
-    case SvgProblem.toManyElements:
-      return 'SVG file is to complex, reduce number of elements';
-    case SvgProblem.toBig:
-      return 'SVG file is to big, reduce its size';
-    case SvgProblem.wrongDefsOrder:
-      return '<defs> section should be placed before other elements (on top the file)';
-  }
+sealed class TagProblem extends SvgProblem {
+  final String tag;
 
-  return "Unknown problem";
+  TagProblem(this.tag);
+
+  @override
+  String description() => "<$tag> tag is not allowed";
+}
+
+class ImageTag extends TagProblem {
+  ImageTag() : super('image');
+}
+
+class StyleTag extends TagProblem {
+  StyleTag() : super('style');
+}
+
+class TitleTag extends TagProblem {
+  TitleTag() : super('title');
+}
+
+class DescTag extends TagProblem {
+  DescTag() : super('desc');
+}
+
+class ComplexityProblem extends SvgProblem {
+  @override
+  String description() => 'SVG file is to complex, reduce number of elements';
+}
+
+class SizeProblem extends SvgProblem {
+  @override
+  String description() => 'SVG file is to big, reduce its size';
+}
+
+class DefsOrder extends SvgProblem {
+  @override
+  String description() =>
+      '<defs> section should be placed before other elements (on top the file)';
 }

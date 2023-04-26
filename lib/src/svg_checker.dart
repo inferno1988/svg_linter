@@ -37,19 +37,19 @@ class SvgChecker {
 
       final imageElements = document.findAllElements("image");
       if (imageElements.isNotEmpty) {
-        fileResults.add(SvgProblem.imageTag);
+        fileResults.add(ImageTag());
       }
       final styleElements = document.findAllElements("style");
       if (styleElements.isNotEmpty) {
-        fileResults.add(SvgProblem.styleTag);
+        fileResults.add(StyleTag());
       }
       final titleElements = document.findAllElements("title");
       if (titleElements.isNotEmpty) {
-        fileResults.add(SvgProblem.titleTag);
+        fileResults.add(TitleTag());
       }
       final descElements = document.findAllElements("desc");
       if (descElements.isNotEmpty) {
-        fileResults.add(SvgProblem.descTag);
+        fileResults.add(DescTag());
       }
 
       final iconComplexity = graphicalElements.fold(
@@ -57,13 +57,13 @@ class SvgChecker {
           (previousValue, element) =>
               document.findAllElements(element).length + previousValue);
       if (iconComplexity > MAX_FILE_COMPLEXITY) {
-        fileResults.add(SvgProblem.toManyElements);
+        fileResults.add(ComplexityProblem());
       }
       final stat = await file.stat();
       final fileSizeInKb = (stat.size / 1024).ceil();
 
       if (fileSizeInKb > MAX_FILE_SIZE_IN_KB) {
-        fileResults.add(SvgProblem.toBig);
+        fileResults.add(SizeProblem());
       }
 
       final elementNames = events
@@ -72,7 +72,7 @@ class SvgChecker {
           .map((e) => e.name)
           .toList();
       if (elementNames.contains("defs") && elementNames.indexOf('defs') != 1) {
-        fileResults.add(SvgProblem.wrongDefsOrder);
+        fileResults.add(DefsOrder());
       }
 
       if (fileResults.isNotEmpty) {

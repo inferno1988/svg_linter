@@ -14,11 +14,13 @@ class FileReport {
     final fileReport = StringBuffer();
 
     fileReport.writeln("    File report: $name");
-    fileReport.writeln("        Size: $sizeInKb kB, max: $MAX_FILE_SIZE_IN_KB kB");
-    fileReport.writeln("        Complexity: $complexity, max: $MAX_FILE_COMPLEXITY");
+    fileReport
+        .writeln("        Size: $sizeInKb kB, max: $MAX_FILE_SIZE_IN_KB kB");
+    fileReport
+        .writeln("        Complexity: $complexity, max: $MAX_FILE_COMPLEXITY");
     fileReport.writeln("        Problems detected:");
     for (final problem in problemList) {
-      fileReport.writeln("        - ${svgProblemAsString(problem)}");
+      fileReport.writeln("        - ${problem.description()}");
     }
 
     return fileReport.toString();
